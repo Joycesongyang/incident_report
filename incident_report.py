@@ -16,19 +16,19 @@ def count_nature(url):
     file_name = str(date) + ".pdf"
 
     #create a new folder if it doesn't exist
-    folder = tempfile.mkdtemp()
+    folder1 = tempfile.mkdtemp()
 
     r = requests.get(url, auth=('usrname', 'password'), verify=False,stream=True)
     r.raw.decode_content = True
-    path = os.path.join("/{}/{}".format(folder, file_name))
-    with open(path, 'wb') as f:
+    path1 = os.path.join("/{}/{}".format(folder1, file_name))
+    with open(path1, 'wb') as f:
             shutil.copyfileobj(r.raw, f) 
 
     # extract the information from pdf into csv
     df_name = str(date) + ".csv"
     folder2 = tempfile.mkdtemp()
-    out_path = os.path.join("/{}/{}".format(folder2, df_name))
-    tabula.io.convert_into(path, out_path, output_format="csv", pages='all', stream = True)
+    path2 = os.path.join("/{}/{}".format(folder2, df_name))
+    tabula.io.convert_into(path1, path2, output_format="csv", pages='all', stream = True)
     df = pd.read_csv(out_path,usecols = ['Nature'])
 
     #clean and sort the data
@@ -47,3 +47,6 @@ if __name__ == "__main__":
                         help="Incident summary url.")
     args = parser.parse_args()
     count_nature(args.incidents)
+
+
+  
